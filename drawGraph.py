@@ -12,7 +12,7 @@ def drawGraph(
     G: nx.DiGraph,
     position: dict[str, Point],
     edgeLabels: dict[tuple[str, str], str],
-    A: list[tuple[str, str]],
+    A: list[tuple[str, str]]|None,
 ):
     font_size = 24
     node_size = 5000
@@ -35,20 +35,20 @@ def drawGraph(
         G, position, edge_labels=edgeLabels, font_size=font_size
     )
     plt.axis("off")
+    if A:
+        plt.subplot(2, 1, 2)
+        nx.draw_networkx_nodes(G, position, node_size=node_size, node_color=node_color)
+        nx.draw_networkx_labels(G, position, font_size=font_size)
+        nx.draw_networkx_edges(
+            G,
+            position,
+            A,
+            width=edge_width,
+            edge_color="r",
+            arrows=True,
+            arrowsize=arrowsize,
+            node_size=node_size,
+        )
 
-    plt.subplot(2, 1, 2)
-    nx.draw_networkx_nodes(G, position, node_size=node_size, node_color=node_color)
-    nx.draw_networkx_labels(G, position, font_size=font_size)
-    nx.draw_networkx_edges(
-        G,
-        position,
-        A,
-        width=edge_width,
-        edge_color="r",
-        arrows=True,
-        arrowsize=arrowsize,
-        node_size=node_size,
-    )
-
-    plt.axis("off")
+        plt.axis("off")
     plt.show()

@@ -1,5 +1,6 @@
 import networkx as nx
-import sys
+# import sys
+import math
 from binaryHeap import BinaryHeap
 
 
@@ -19,7 +20,7 @@ def Dijkstra(G: nx.DiGraph, start: str) -> list[tuple[str, str]]:
     p:dict[str,P] = dict()
     q:dict[str,str|None] = dict()
     for v in G.nodes:
-        p[v] = P(v, sys.float_info.max)
+        p[v] = P(v, math.inf)
         q[v] = None
     p[start].value = 0
     U = BinaryHeap[P]()
@@ -42,3 +43,18 @@ def Dijkstra(G: nx.DiGraph, start: str) -> list[tuple[str, str]]:
         if not (f is None):
             A.append((f, t))
     return A
+
+def FloydMarshall(G: nx.DiGraph) -> dict[tuple[str,str],float]:
+    res:dict[tuple[str,str],float] = dict()
+    for u in G.nodes:
+        for v in G.nodes:
+            res[(u,v)] = math.inf
+        res[(u,u)]=0.
+    for u,v in G.edges:
+        res[(u,v)] = G.edges[(u,v)]['weight']
+
+    for t in G.nodes:
+        for u in G.nodes:
+            for v in G.nodes:
+                res[(u,v)] = min(res[u,v],res[u,t]+res[t,v])       
+    return res
